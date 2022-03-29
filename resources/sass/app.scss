@@ -1,0 +1,22 @@
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+
+// Variables
+@import 'variables';
+
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';
+
+//AdminLET
+@import "~admin-lte/dist/css/adminlte.css";
+
+//Font Awesome
+@import "~@fortawesome/fontawesome-free/scss/fontawesome.scss";
+@import "~@fortawesome/fontawesome-free/scss/solid.scss";
+@import "~@fortawesome/fontawesome-free/scss/regular.scss";
+@import "~@fortawesome/fontawesome-free/scss/brands.scss";
+
+//Datatables
+@import "~datatables.net-bs4/css/dataTables.bootstrap4.css";
+@import "~datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css";
+@import "~datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css";
