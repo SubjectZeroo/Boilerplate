@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 use Yajra\DataTables\Facades\DataTables;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class UserController extends Controller
 {
@@ -15,14 +18,19 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
+
+        if (session('success_message')) {
+            Alert::toast(session('success_message'), 'success');
+        }
+
         if($request->ajax()) {
             $data = User::select('*');
 
             return Datatables::of($data)
-                ->addIndexColumn()
-                ->addColumn('Actions', 'users/datatables/actions')
-                ->rawColumns(['Actions'])
-                ->make(true);
+                    ->addIndexColumn()
+                    ->addColumn('Actions', 'users/datatables/actions')
+                    ->rawColumns(['Actions'])
+                    ->make(true);
         }
         return view('users.index');
     }
@@ -34,7 +42,9 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('users.create');
+        $roles = Role::all();
+
+        return view('users.create', compact('roles'));
     }
 
     /**
@@ -45,7 +55,21 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8'],
+        ]);
+
+        $user = User::create([
+            'name' => $request['name'],
+            'email' => $request['email'],
+            'password' => Hash::make($request['password']),
+        ]);
+
+        $user->roles()->sync($request->roles);
+
+        return redirect()->route('users.index')->withSuccessMessage('Usuario Creado con Exito!');;
     }
 
     /**
@@ -65,9 +89,10 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(User $user)
     {
-        //
+        $roles = Role::all();
+        return view('users.edit', compact('user', 'roles'));
     }
 
     /**
@@ -77,9 +102,50 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, User $user)
     {
-        //
+
+        $option = '';
+        if ($request->has('option')) {
+            $option = $request->input('option');
+        }
+
+        if ($option == 'userinfo') {
+            return $this->updateUserInfo($request, $user);
+        } elseif ($option == 'userpassword') {
+            return $this->updateUserPassword($request, $user);
+        }
+    }
+
+    public function updateUserInfo(Request $request, User $user)
+    {
+        $attributes = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
+        ]);
+
+        $user->update([
+            'name' => $request['name'],
+            'email' => $request['email'],
+        ]);
+
+        $user->roles()->sync($request->roles);
+
+        return redirect()
+            ->route('users.index')->withSuccessMessage('Información Actualizada con Exito!');
+    }
+
+    public function updateUserPassword(Request $request, User $user)
+    {
+        $attributes = $request->validate([
+            'password' => ['required', 'string', 'min:8'],
+        ]);
+
+        $user->update([
+            'password' => Hash::make($request['password']),
+        ]);
+
+        return redirect()->route('users.index')->withSuccessMessage('Password Actualizada con Exito!');;
     }
 
     /**
@@ -90,6 +156,11 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = User::findOrFail($id);
+
+        $user->delete();
+
+        return response()->json(['success' => 'Usuario Eliminado con Exito!']);
+
     }
 }

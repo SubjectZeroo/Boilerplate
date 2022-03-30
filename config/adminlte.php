@@ -50,7 +50,7 @@ return [
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
-    'logo_img_alt' => 'AdminLTE',
+    'logo_img_alt' => 'BoilerPlate',
 
     /*
     |--------------------------------------------------------------------------
@@ -127,7 +127,7 @@ return [
     'classes_content_wrapper' => '',
     'classes_content_header' => '',
     'classes_content' => '',
-    'classes_sidebar' => 'sidebar-dark-primary elevation-4',
+    'classes_sidebar' => 'sidebar-light-primary elevation-4',
     'classes_sidebar_nav' => '',
     'classes_topnav' => 'navbar-white navbar-light',
     'classes_topnav_nav' => 'navbar-expand',
@@ -254,16 +254,19 @@ return [
                 [
                     'text' => 'Usuarios',
                     'url'  => 'users',
+                    'can'  => 'users.index',
                     'icon' => false,
                 ],
                 [
                     'text' => 'Roles',
                     'url'  => 'roles',
+                    'can'  => 'roles.index',
                     'icon' => false,
                 ],
                 [
                     'text' => 'Permisos',
                     'url'  => 'permissions',
+                    'can'  => 'permissions.index',
                     'icon' => false,
                 ],
                 // [

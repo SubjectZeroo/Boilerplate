@@ -25,6 +25,11 @@
         "admin-lte": "^3.2.0",
         "datatables.net-bs4": "^1.11.5",
         "datatables.net-buttons-bs4": "^2.2.2",
-        "jquery": "^3.6.0"
+        "datatables.net-responsive-bs4": "^2.2.9",
+        "drmonty-datatables-colvis": "^1.1.2",
+        "jquery": "^3.6.0",
+        "jszip": "^3.7.1",
+        "pdfmake": "^0.2.4",
+        "sweetalert2": "^11.4.8"
     }
 }

@@ -1,11 +1,11 @@
 @extends('adminlte::page')
 
-@section('title', 'Roles')
+@section('title', 'Permisos')
 
 @section('content_header')
     <div class="row mb-2">
             <div class="col-sm-10">
-                <h1 class="m-0 text-dark">Tabla Permisos</h1>
+                <h1 class="m-0 text-dark">Tabla de Permisos</h1>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
                     <li class="breadcrumb-item active">Permisos</li>

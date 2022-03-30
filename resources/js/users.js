@@ -69,4 +69,54 @@ jQuery(function () {
         },
 
     });
+
+    /**
+     * Modal de confirmacion para eliminar.
+     */
+        $('body').on('click', '#getUserId', function () {
+            var user_id = $(this).data("id");
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            Swal.fire({
+                title: 'Estas seguro de eliminar este Usuario?',
+                text: "No vas a poder recuperar esta informacion!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#007bff',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Si, Eliminalo!',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "DELETE",
+                        url: "users" + '/' + user_id,
+                        data: {
+                            '_token': $('input[name=_token]').val()
+                        },
+                        success: function (data) {
+                            Swal.fire({
+                                toast: true,
+                                position: 'top-end',
+                                icon: 'success',
+                                title: 'Usuario eliminado',
+                                showConfirmButton: false,
+
+                                timer: 1500
+                            })
+                            $('#table-users').DataTable().ajax.reload();
+                        },
+                        error: function (data) {
+
+                            console.log('Error:', data);
+                        }
+                    });
+                } else {
+                    return false;
+                }
+            })
+        });
 });

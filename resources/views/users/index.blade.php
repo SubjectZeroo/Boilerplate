@@ -5,7 +5,7 @@
 @section('content_header')
     <div class="row mb-2">
             <div class="col-sm-10">
-                <h1 class="m-0 text-dark">Tabla Usuarios</h1>
+                <h1 class="m-0 text-dark">Tabla de Usuarios</h1>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
                     <li class="breadcrumb-item active">Usuarios</li>
@@ -27,4 +27,5 @@
             @include('users.datatables.table')
         </div>
     </div>
+    @include('sweetalert::alert')
 @stop

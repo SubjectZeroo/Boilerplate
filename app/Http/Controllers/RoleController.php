@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
+use Yajra\DataTables\DataTables;
 
 class RoleController extends Controller
 {
@@ -11,8 +15,19 @@ class RoleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        if($request->ajax()) {
+
+            $data = Role::select('*');
+
+            return Datatables::of($data)
+                ->addIndexColumn()
+                ->addColumn('Actions', 'roles/datatables/actions')
+                ->rawColumns(['Actions'])
+                ->make(true);
+        }
+
         return view('roles.index');
     }
 
@@ -23,7 +38,8 @@ class RoleController extends Controller
      */
     public function create()
     {
-        return view('permissions.create');
+        // $permissions = Permission::all();
+        return view('roles.create');
     }
 
     /**
@@ -34,7 +50,19 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $attributes = $request->validate([
+            'name' => ['required', 'string', 'max:255','unique:roles,name'],
+            'guard_name' => ['required', 'string', 'max:3'],
+        ]);
+
+        $role = Role::create([
+            'name' => $request['name'],
+            'guard_name' => $request['guard_name'],
+        ]);
+
+        $role->permissions()->sync($request->permissions);
+
+        return redirect()->route('roles.index')->withSuccessMessage('Rol Creado con Exito!');
     }
 
     /**
@@ -54,9 +82,9 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Role $role)
     {
-        //
+        return view('roles.edit', compact('role'));
     }
 
     /**
@@ -66,9 +94,21 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Role $role)
     {
-        //
+        $attributes = $request->validate([
+            'name' => ['required', 'string', 'max:255','unique:roles,name,' . $role->id],
+            'guard_name' => ['required', 'string', 'max:3'],
+        ]);
+
+        $role->update([
+            'name' => $request['name'],
+            'guard_name' => $request['guard_name'],
+        ]);
+
+        $role->permissions()->sync($request->permissions);
+
+        return redirect()->route('roles.index')->withSuccessMessage('Rol Actualizado con Exito!');
     }
 
     /**
@@ -79,6 +119,10 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $role = Role::findOrFail($id);
+
+        $role->delete();
+
+        return response()->json(['success' => 'Rol Eliminado con Exito']);
     }
 }

@@ -1,4 +1,4 @@
-<table id="table-users" class="table table-striped table-bordered">
+<table id="table-users" class="table table-striped table-bordered display nowrap">
     {{-- <colgroup>
         <col width="20%">
         <col width="20%">

@@ -1,21 +1,10 @@
-{{-- <a title="Ver Ficha Tecnica del Usuario" data-toggle="tooltip" class="dropdown-item"
-            href="{{ route('users.show', $id) }}">
-            <i class="far fa-eye"></i>
-            Ver Ficha Tecnica del Usuario
-</a> --}}
-{{-- @can('users.edit') --}}
-    {{-- <a title="Editar Usuario" href="{{ route('users.edit', $id) }}">
-        <i class="far fa-edit"></i>
-        Editar Usuario
-    </a> --}}
-    <a title="Editar Usuario" class="text-green" href="{{ route('users.edit', $id) }}">
+@can('users.edit')
+    <a title="Editar Usuario" class="btn btn-success" href="{{ route('users.edit', $id) }}">
         <i class="far fa-edit"></i>
     </a>
-{{-- @endcan --}}
-{{-- @can('users.destroy') --}}
-    <a title="Eliminar Usuario" class="text-danger">
+@endcan
+@can('users.destroy')
+    <a title="Eliminar Usuario" class="btn btn-danger" data-id="{{ $id }}" data-target="#DeleteUser" id="getUserId">
         <i class="far fa-trash-alt"></i>
     </a>
-{{-- @endcan --}}
-
-
+@endcan

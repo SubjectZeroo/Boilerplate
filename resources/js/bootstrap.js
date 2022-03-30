@@ -1,16 +1,22 @@
 window._ = require('lodash');
-
+window.Swal = require('sweetalert2');
 try {
     window.Popper = require('popper.js').default;
     window.$ = window.jQuery = require('jquery');
     require('bootstrap');
     require('admin-lte');
 
+    window.JSZip = require( 'jszip' );
     require('datatables.net-bs4');
     require('datatables.net-buttons-bs4');
     require('datatables.net-buttons/js/buttons.html5.js');
     require('datatables.net-buttons/js/buttons.print.js');
     require('datatables.net-buttons/js/buttons.colVis.js')();
+
+    // pdfMake
+    var pdfMake = require('pdfmake/build/pdfmake.js');
+    var pdfFonts = require('pdfmake/build/vfs_fonts.js');
+    pdfMake.vfs = pdfFonts.pdfMake.vfs;
 } catch (e) {}
 
 /**
@@ -40,3 +46,5 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     forceTLS: true
 // });
 require('./users');
+require('./roles');
+require('./permissions');
