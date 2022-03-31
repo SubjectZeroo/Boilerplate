@@ -19,7 +19,8 @@
         <div class="card-header">
             <strong>Información Básica Permiso</strong>
         </div>
-        <x-form method="POST" action="{{ route('permissions.store') }}">
+        <x-form method="POST" action="{{ route('permissions.update', $permission->id) }}">
+             @method('PUT')
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-12">

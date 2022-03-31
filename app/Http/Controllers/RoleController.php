@@ -2,14 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreRoleRequest;
+use App\Http\Requests\UpdateRoleRequest;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Yajra\DataTables\DataTables;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class RoleController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('can:roles.create')->only('create', 'store');
+        $this->middleware('can:roles.edit')->only('edit', 'update');
+        $this->middleware('can:roles.destroy')->only('destroy');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -17,6 +26,10 @@ class RoleController extends Controller
      */
     public function index(Request $request)
     {
+        if (session('success_message')) {
+            Alert::toast(session('success_message'), 'success');
+        }
+
         if($request->ajax()) {
 
             $data = Role::select('*');
@@ -38,8 +51,8 @@ class RoleController extends Controller
      */
     public function create()
     {
-        // $permissions = Permission::all();
-        return view('roles.create');
+        $permissions = Permission::all();
+        return view('roles.create',compact('permissions'));
     }
 
     /**
@@ -48,12 +61,8 @@ class RoleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreRoleRequest $request)
     {
-        $attributes = $request->validate([
-            'name' => ['required', 'string', 'max:255','unique:roles,name'],
-            'guard_name' => ['required', 'string', 'max:3'],
-        ]);
 
         $role = Role::create([
             'name' => $request['name'],
@@ -84,7 +93,8 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
-        return view('roles.edit', compact('role'));
+        $permissions = Permission::all();
+        return view('roles.edit', compact('role','permissions'));
     }
 
     /**
@@ -94,17 +104,10 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Role $role)
+    public function update(UpdateRoleRequest $request, Role $role)
     {
-        $attributes = $request->validate([
-            'name' => ['required', 'string', 'max:255','unique:roles,name,' . $role->id],
-            'guard_name' => ['required', 'string', 'max:3'],
-        ]);
-
-        $role->update([
-            'name' => $request['name'],
-            'guard_name' => $request['guard_name'],
-        ]);
+        dd($request->all());
+        $role->update($request->all());
 
         $role->permissions()->sync($request->permissions);
 

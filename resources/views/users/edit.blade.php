@@ -4,13 +4,13 @@
 
 @section('content_header')
     <div class="row mb-2">
-            <div class="col-sm-10">
-                <h1 class="m-0 text-dark">Editar Usuario</h1>
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
-                    <li class="breadcrumb-item active">Editar Usuario</li>
-                </ol>
-            </div>
+        <div class="col-sm-10">
+            <h1 class="m-0 text-dark">Editar Usuario</h1>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
+                <li class="breadcrumb-item active">Editar Usuario</li>
+            </ol>
+        </div>
     </div>
 @stop
 @section('content')
@@ -38,7 +38,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="name">Email Usuario</label>
-                            <input id="email" name="email" type="text" class="form-control {{ $errors->has('email') ? 'is-invalid' : '' }}"
+                            <input id="email" name="email" type="mail" class="form-control {{ $errors->has('email') ? 'is-invalid' : '' }}"
                                 value="{{ old('email', $user->email) }}">
                             @error('email')
                                 <div class="invalid-feedback">
@@ -53,16 +53,15 @@
                         </h6>
                     </div>
                     <div class="col-md-6 mb-2">
-                                            <div class="form-check">
-                                                @foreach ($roles as $role)
-                                                    <div>
-                                                        <input type="checkbox" class="form-check-input mr-1"
-                                                            name="roles[]" value="{{ $role->id }}"
-                                                            {{ $role->users->contains('id', $user->id) ? 'checked' : '' }}>
-                                                        <label>{{ $role->name }}</label>
-                                                    </div>
-                                                @endforeach
-                                            </div>
+                        <div class="form-check">
+                            @foreach ($roles as $role)
+                                <div>
+                                    <input type="checkbox" class="form-check-input mr-1" name="roles[]" value="{{ $role->id }}"
+                                        {{ $role->users->contains('id', $user->id) ? 'checked' : '' }}>
+                                    <label>{{ $role->name }}</label>
+                                </div>
+                            @endforeach
+                        </div>
                     </div>
                 </div>
             </div>
@@ -89,7 +88,7 @@
                     <div class="col-md-6">
                         <input type="hidden" name="option" value="userpassword">
                         <div class="form-group">
-                            <label for="name">Password</label>
+                            <label for="password">Password</label>
                             <input id="password" name="password" type="password" class="form-control {{ $errors->has('password') ? 'is-invalid' : '' }}" value="{{ old('password') }}">
                             @error('password')
                                 <div class="invalid-feedback">

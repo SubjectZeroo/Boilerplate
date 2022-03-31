@@ -19,7 +19,7 @@
          <div class="card-header">
             <strong>Información Básica Rol</strong>
         </div>
-        <x-form method="POST" action="{{ route('roles.store') }}">
+        <x-form method="POST" action="{{ route('roles.store') }}" >
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-12">
@@ -32,6 +32,23 @@
                                 </div>
                             @enderror
                             <input hidden name="guard_name" type="text" class="form-control" value="web">
+                        </div>
+                    </div>
+                    <div class="col-md-12 mb-2">
+                        <h2 class="h3">
+                            Lista de Permisos
+                        </h2>
+                        <div class="form-group">
+                           @foreach ($permissions as $permission)
+                                                        <div>
+                                                            <label for="">
+                                                                <input type="checkbox" class="mr-2"
+                                                                    name="permissions[]"
+                                                                    value="{{ $permission->id }}">
+                                                                {{ $permission->name }}
+                                                            </label>
+                                                        </div>
+                                                    @endforeach
                         </div>
                     </div>
                 </div>

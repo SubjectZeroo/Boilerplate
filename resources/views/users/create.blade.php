@@ -35,8 +35,8 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="name">Email Usuario</label>
-                            <input id="email" name="email" type="text" class="form-control {{ $errors->has('email') ? 'is-invalid' : '' }}" value="{{ old('email') }}">
+                            <label for="email">Email Usuario</label>
+                            <input id="email" name="email" type="mail" class="form-control {{ $errors->has('email') ? 'is-invalid' : '' }}" value="{{ old('email') }}">
                             @error('email')
                                 <div class="invalid-feedback">
                                     {{ $errors->first('email') }}
@@ -46,7 +46,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="name">Password</label>
+                            <label for="password">Password</label>
                             <input id="password" name="password" type="password" class="form-control {{ $errors->has('password') ? 'is-invalid' : '' }}" value="{{ old('password') }}">
                             @error('password')
                                 <div class="invalid-feedback">

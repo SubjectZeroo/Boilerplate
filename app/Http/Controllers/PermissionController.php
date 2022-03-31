@@ -2,13 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StorePermissionRequest;
+use App\Http\Requests\UpdatePermisssionRequest;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use Spatie\Permission\Models\Permission;
 use Yajra\DataTables\DataTables;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class PermissionController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('can:permissions.create')->only('create', 'store');
+        $this->middleware('can:permissions.edit')->only('edit', 'update');
+        $this->middleware('can:permissions.destroy')->only('destroy');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -16,15 +24,19 @@ class PermissionController extends Controller
      */
     public function index(Request $request)
     {
+        if (session('success_message')) {
+            Alert::toast(session('success_message'), 'success');
+        }
+
         if($request->ajax()) {
 
             $data = Permission::select('*');
 
             return Datatables::of($data)
-                ->addIndexColumn()
-                ->addColumn('Actions', 'permissions/datatables/actions')
-                ->rawColumns(['Actions'])
-                ->make(true);
+                    ->addIndexColumn()
+                    ->addColumn('Actions', 'permissions/datatables/actions')
+                    ->rawColumns(['Actions'])
+                    ->make(true);
         }
 
         return view('permissions.index');
@@ -46,17 +58,9 @@ class PermissionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StorePermissionRequest $request)
     {
-        $attributes = $request->validate([
-            'name' => ['required', 'string', 'max:255','unique:permissions,name'],
-            'guard_name' => ['required', 'string', 'max:3'],
-        ]);
-
-        $permission = Permission::create([
-            'name' => $request['name'],
-            'guard_name' => $request['guard_name'],
-        ]);
+        $permission = Permission::create($request->all());
 
         return redirect()->route('permissions.index')->withSuccessMessage('Permiso Creado con Exito!');
     }
@@ -90,17 +94,9 @@ class PermissionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Permission $permission)
+    public function update(UpdatePermisssionRequest $request, Permission $permission)
     {
-        $attributes = $request->validate([
-            'name' => ['required', 'string', 'max:255', 'unique:permissions,name,' . $permission->id],
-            'guard_name' => ['required', 'string', 'max:3'],
-        ]);
-
-        $permission->update([
-            'name' => $request['name'],
-            'guard_name' => $request['guard_name'],
-        ]);
+        $permission->update($request->all());
 
         return redirect()->route('permissions.index')->withSuccessMessage('Permiso Actualizado con Exito!');
     }

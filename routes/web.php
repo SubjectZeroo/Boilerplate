@@ -22,7 +22,11 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::resource('/users', UserController::class)->names('users');
-Route::resource('/roles', RoleController::class)->names('roles');
-Route::resource('/permissions', PermissionController::class)->names('permissions');
+Route::middleware('auth')->group(function () {
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    Route::resource('/users', UserController::class)->names('users');
+    Route::resource('/roles', RoleController::class)->names('roles');
+    Route::resource('/permissions', PermissionController::class)->names('permissions');
+});
+
+

@@ -32,6 +32,20 @@
                             <input hidden name="guard_name" type="text" class="form-control" value="web">
                         </div>
                     </div>
+                    <div class="col-md-12 mb-2">
+                        <h2 class="h3"> Lista de Permisos</h2>
+                        <div class="form-check">
+                            @foreach ($permissions as $permission)
+                                    <div>
+                                        <label for="">
+                                            <input type="checkbox" class="form-check-input mr-2" name="permissions[]" value="{{ $permission->id }}"
+                                                {{ $role->permissions->contains('id', $permission->id) ? 'checked' : '' }}>
+                                                {{ $permission->name }}
+                                        </label>
+                                    </div>
+                            @endforeach
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="card-footer">

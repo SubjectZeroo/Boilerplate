@@ -8,6 +8,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
+use Laravolt\Avatar\Facade as Avatar;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
@@ -42,4 +44,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function adminlte_image()
+    {
+        return Avatar::create(Str::title($this->name))->toBase64();
+    }
 }

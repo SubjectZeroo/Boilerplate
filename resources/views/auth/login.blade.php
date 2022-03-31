@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+{{-- <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
@@ -69,5 +69,78 @@
             </div>
         </div>
     </div>
+</div> --}}
+<div class="login-box d-flex justify-content-around align-items-center">
+        <div class="card">
+            <div class="card-body login-card-body">
+                <h1 class="h5 login-box-msg">
+                    Bienvenido a <strong>Boilerplate</strong>
+                </h1>
+                <p class="login-box-msg">
+                    Inicia sesión para ingresar a tu cuenta.
+                </p>
+                <form method="POST" action="{{ route('login') }}" class="form-signin">
+                    @csrf
+                    <div class="form-group first">
+                        <label for="email">{{ __('E-Mail Address') }}</label>
+                        <div class="input-group">
+                            <input id="email" type="email"
+                                class="form-control
+                                    @error('email') is-invalid @enderror"
+                                name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-envelope"></span>
+                                </div>
+                            </div>
+                        </div>
+                        @error('email')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                    <div class="form-group last mb-4">
+                        <label for="password">Password</label>
+
+
+                        <div class="input-group">
+                            <input id="password" type="password"
+                                class="form-control
+                                @error('password') is-invalid @enderror"
+                                name="password" required autocomplete="current-password">
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-lock"></span>
+                                </div>
+                            </div>
+                        </div>
+                        @error('password')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                    <div class="form-check mb-5 d-flex jusitfy-between">
+                        <input class="form-check-input" type="checkbox" name="remember" id="remember"
+                            {{ old('remember') ? 'checked' : '' }}>
+                        <label class="form-check-label" for="remember">
+                            {{ __('Remember Me') }}
+                        </label>
+                        {{-- @if (Route::has('password.request'))
+                            <a class="ml-auto" href="{{ route('password.request') }}">
+                                {{ __('Forgot Your Password?') }}
+                            </a>
+                        @endif --}}
+                    </div>
+                    <button type="submit" value="Log In" class="btn text-white btn-block btn-primary">
+                        <strong> {{ __('Login') }} </strong>
+                    </button>
+                </form>
+            </div>
+        </div>
+        <div class="d-none d-sm-none d-md-none d-xl-block">
+            <img class="img-fluid " src="{{ asset('images/background.png') }}" alt="">
+        </div>
 </div>
 @endsection

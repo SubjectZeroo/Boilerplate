@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -11,6 +12,12 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('can:users.create')->only('create', 'store');
+        $this->middleware('can:users.edit')->only('edit', 'update');
+        $this->middleware('can:users.destroy')->only('destroy');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -53,14 +60,8 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8'],
-        ]);
-
         $user = User::create([
             'name' => $request['name'],
             'email' => $request['email'],
@@ -69,7 +70,7 @@ class UserController extends Controller
 
         $user->roles()->sync($request->roles);
 
-        return redirect()->route('users.index')->withSuccessMessage('Usuario Creado con Exito!');;
+        return redirect()->route('users.index')->withSuccessMessage('Usuario Creado con Exito!');
     }
 
     /**
